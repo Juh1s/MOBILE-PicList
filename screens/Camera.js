@@ -1,12 +1,42 @@
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera'
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { app } from '../firebaseConfig';
+import { getDatabase, ref, push, onValue, remove } from 'firebase/database';
+
+const database = getDatabase(app);
 
 export default function Camera() {
   
   const [photoName, setPhotoName] = useState('');
   const [photoBase64, setPhotoBase64] = useState('');
   const [permission, requestPermission] = useCameraPermissions();
+  const [picture, setPicture ] = useState({
+    name: "",
+    photograph: "",
+  });
+  const [ pics, setPics ] = useState([]);
+  const [ keys, setKeys ] = useState([]);
+
+  useEffect(() => {
+    const picsRef = ref(database, '/pics');
+    onValue(picsRef, (snapshot) => {
+      const data = snapshot.val();
+      if(data) {
+        setPics(Object.values(data));
+        setKeys(Object.keys(data));
+      } else
+        setPics([]);
+    })
+  }, []);
+  
+const handleSave = () => {
+  if(picture.name && picture.photograph) {
+    push(ref(database, '/pics'), picture);
+  } else {
+    Alert.alert("Warning", "Type value first");
+  }
+}
 
   const camera = useRef(null);
 
@@ -42,7 +72,6 @@ export default function Camera() {
             <Text>No photo taken yet</Text>
         )}
       </View>
-      <Text style={{ fontSize: 20 }}>Camera goes here.</Text>
     </View>
   );
 }

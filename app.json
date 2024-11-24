@@ -1,5 +1,6 @@
 {
   "expo": {
+    "newArchEnabled": true,
     "name": "MOBILE_PicList",
     "slug": "MOBILE_PicList",
     "version": "1.0.0",
