@@ -1,13 +1,15 @@
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TextInput } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera'
 import { useState, useRef, useEffect } from 'react';
-import { app } from '../firebaseConfig';
-import { getDatabase, ref, push, onValue, remove } from 'firebase/database';
+//import { app } from '../firebaseConfig';
+//import { getDatabase, ref, push, onValue, remove } from 'firebase/database';
 
-const database = getDatabase(app);
+//const database = getDatabase(app);
 
 export default function Camera() {
   
+  const [photoTaken, setPhotoTaken] = useState(false);
+  const [photoAccept, setPhotoAccept] = useState(false);
   const [photoName, setPhotoName] = useState('');
   const [photoBase64, setPhotoBase64] = useState('');
   const [permission, requestPermission] = useCameraPermissions();
@@ -17,7 +19,7 @@ export default function Camera() {
   });
   const [ pics, setPics ] = useState([]);
   const [ keys, setKeys ] = useState([]);
-
+/*
   useEffect(() => {
     const picsRef = ref(database, '/pics');
     onValue(picsRef, (snapshot) => {
@@ -29,23 +31,41 @@ export default function Camera() {
         setPics([]);
     })
   }, []);
-  
+*/
 const handleSave = () => {
+  /*
   if(picture.name && picture.photograph) {
     push(ref(database, '/pics'), picture);
   } else {
     Alert.alert("Warning", "Type value first");
   }
+  */
 }
 
   const camera = useRef(null);
 
   const snap = async () => {
     if(camera) {
+      try{
         const photo = await camera.current.takePictureAsync({base64: true});
-        setPhotoName(photo.uri);
+        setPhotoName(photo);
         setPhotoBase64(photo.base64);
+        setPhotoTaken(true);
+      } catch(e) {
+        console.log(e);
+      }
     }
+  }
+
+  const discardPhoto = () => {
+    setPhotoTaken(false);
+    setPhotoAccept(false);
+    setPhotoName('');
+    setPhotoBase64('');
+  }
+  const acceptPhoto = () => {
+    setPhotoAccept(true);
+    setPicture({ ...picture, photograph: photoName })
   }
 
   if (!permission) return<View/>;   // permission is loading
@@ -58,23 +78,60 @@ const handleSave = () => {
     );
   }
   
-  return (
-    <View style={styles.container}>
-      <CameraView style={{flex: 1, minWidth: "100%"}} ref={camera} />
-      <Button title='Take Photo' onPress={snap} />
-      <View style={{ flex: 1 }}>
-        {photoName && photoBase64 ? (
+  //if (!photoTaken) {
+    return (
+      <View style={styles.container}>
+        <View style={{ flex: 1 , flexDirection: 'row' }}>
+          { !photoAccept ? (
             <>
-                <Image style={{ flex: 1 }} source={{uri:photoName}}/>
-                <Image style={{ flex: 1 }} source={{uri:`data:image/jpg;base64,${photoBase64}`}}/>
+              <CameraView style={{flex: 1, minWidth: "80%"}} ref={camera} />
+              <Button title='Snap' style={{height: "10%"}} onPress={snap} />
             </>
-        ) : (
-            <Text>No photo taken yet</Text>
-        )}
+          ) : (
+            <>
+              <TextInput
+                style={{ marginBottom: 10 }}
+                label="Name"
+                mode="outlined"
+                placeholder='Name'
+                value={picture.name}
+                onChangeText={text => setPicture({ ...picture, name: text })}
+              />
+            </>
+          )}
+        </View>
+        <View style={{ flex: 1 }}>
+          {photoTaken ? (
+              <>
+                  <Image style={styles.image} source={photoName}/>
+                  <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} >
+                    <Button color="#ff4500" title='Discard Photo' onPress={discardPhoto} />
+                    {!photoAccept ? (
+                      <Button  title='Accept Photo'  onPress={acceptPhoto}/>
+                    ) : (
+                      <Button color="#008000" title='Save Photo' onPress={handleSave} />
+                    )}
+                  </View>
+              </>
+          ) : (
+              <Text>No photo taken yet</Text>
+          )}
+        </View>
       </View>
-    </View>
   );
+/*} else  {
+  return ( //uri:`data:image/jpg;base64,${photoBase64}`
+    <View style={styles.container}>
+      <Image style={{ flex: 1 }} source={{ uri: photoName }} /> 
+      <Text>Testing!</Text>
+      <Button title='Discard Photo' onPress={discardPhoto} />
+      <Button title='Accept Photo' onPress={acceptPhoto} />
+    </View>
+  ) //test
+}*/
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -83,4 +140,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  image: {
+    flex: 3,
+    height: undefined,
+    width: undefined,
+    resizeMode: 'contain',
+  }
 });
