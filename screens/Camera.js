@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, Button, Image, TextInput } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera'
 import { useState, useRef, useEffect } from 'react';
-//import { app } from '../firebaseConfig';
-//import { getDatabase, ref, push, onValue, remove } from 'firebase/database';
+import { app } from '../firebaseConfig';
+import { getDatabase, ref, push, onValue } from 'firebase/database';
 
-//const database = getDatabase(app);
+const database = getDatabase(app);
 
 export default function Camera() {
   
@@ -17,11 +17,12 @@ export default function Camera() {
     name: "",
     photograph: "",
   });
-  const [ pics, setPics ] = useState([]);
-  const [ keys, setKeys ] = useState([]);
-/*
+  //const [ pics, setPics ] = useState([]);
+  //const [ keys, setKeys ] = useState([]);
+
+  /*
   useEffect(() => {
-    const picsRef = ref(database, '/pics');
+    const picsRef = ref(database, 'pics/');
     onValue(picsRef, (snapshot) => {
       const data = snapshot.val();
       if(data) {
@@ -31,15 +32,15 @@ export default function Camera() {
         setPics([]);
     })
   }, []);
-*/
+  */
+
 const handleSave = () => {
-  /*
   if(picture.name && picture.photograph) {
-    push(ref(database, '/pics'), picture);
+    push(ref(database, 'pics/'), picture);
+    discardPhoto();
   } else {
     Alert.alert("Warning", "Type value first");
   }
-  */
 }
 
   const camera = useRef(null);
@@ -60,6 +61,7 @@ const handleSave = () => {
   const discardPhoto = () => {
     setPhotoTaken(false);
     setPhotoAccept(false);
+    setPicture({ name: "", photograph: "" })
     setPhotoName('');
     setPhotoBase64('');
   }
@@ -78,57 +80,46 @@ const handleSave = () => {
     );
   }
   
-  //if (!photoTaken) {
-    return (
-      <View style={styles.container}>
-        <View style={{ flex: 1 , flexDirection: 'row' }}>
-          { !photoAccept ? (
-            <>
-              <CameraView style={{flex: 1, minWidth: "80%"}} ref={camera} />
-              <Button title='Snap' style={{height: "10%"}} onPress={snap} />
-            </>
-          ) : (
-            <>
-              <TextInput
-                style={{ marginBottom: 10 }}
-                label="Name"
-                mode="outlined"
-                placeholder='Name'
-                value={picture.name}
-                onChangeText={text => setPicture({ ...picture, name: text })}
-              />
-            </>
-          )}
-        </View>
-        <View style={{ flex: 1 }}>
-          {photoTaken ? (
-              <>
-                  <Image style={styles.image} source={photoName}/>
-                  <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} >
-                    <Button color="#ff4500" title='Discard Photo' onPress={discardPhoto} />
-                    {!photoAccept ? (
-                      <Button  title='Accept Photo'  onPress={acceptPhoto}/>
-                    ) : (
-                      <Button color="#008000" title='Save Photo' onPress={handleSave} />
-                    )}
-                  </View>
-              </>
-          ) : (
-              <Text>No photo taken yet</Text>
-          )}
-        </View>
-      </View>
-  );
-/*} else  {
-  return ( //uri:`data:image/jpg;base64,${photoBase64}`
+  return (
     <View style={styles.container}>
-      <Image style={{ flex: 1 }} source={{ uri: photoName }} /> 
-      <Text>Testing!</Text>
-      <Button title='Discard Photo' onPress={discardPhoto} />
-      <Button title='Accept Photo' onPress={acceptPhoto} />
+      <View style={{ flex: 1 , flexDirection: 'row' }}>
+        { !photoAccept ? (
+          <>
+            <CameraView style={{flex: 1, minWidth: "80%"}} ref={camera} />
+            <Button title='Snap' style={{height: "10%"}} onPress={snap} />
+          </>
+        ) : (
+          <>
+            <TextInput
+              style={{ marginBottom: 10 }}
+              label="Name"
+              mode="outlined"
+              placeholder='Name'
+              value={picture.name}
+              onChangeText={text => setPicture({ ...picture, name: text })}
+            />
+          </>
+        )}
+      </View>
+      <View style={{ flex: 1 }}>
+        {photoTaken ? (
+            <>
+                <Image style={styles.image} source={photoName}/>
+                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} >
+                  <Button color="#ff4500" title='Discard Photo' onPress={discardPhoto} />
+                  {!photoAccept ? (
+                    <Button  title='Accept Photo'  onPress={acceptPhoto}/>
+                  ) : (
+                    <Button color="#008000" title='Save Photo' onPress={handleSave} />
+                  )}
+                </View>
+            </>
+        ) : (
+            <Text>No photo taken yet</Text>
+        )}
+      </View>
     </View>
-  ) //test
-}*/
+  );
 }
 
 

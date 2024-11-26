@@ -1,14 +1,14 @@
 import { initializeApp } from "firebase/app";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBZlAKf3ZXqZ6ILdlh4UNH6qwB8nO5mXQM",
-  authDomain: "piclist-481d7.firebaseapp.com",
-  databaseURL: "https//piclist-481d7-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "piclist-481d7",
-  storageBucket: "piclist-481d7.firebasestorage.app",
-  messagingSenderId: "1032837411431",
-  appId: "1:1032837411431:web:7b1b0dcb91c2f78385dac2"
+  apiKey: "AIzaSyBlC1UgdewNOS_0pwfyWFZwvSzo6mg6Jfo",
+  authDomain: "piclist-5f835.firebaseapp.com",
+  databaseURL: "https://piclist-5f835-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "piclist-5f835",
+  storageBucket: "piclist-5f835.firebasestorage.app",
+  messagingSenderId: "476592060213",
+  appId: "1:476592060213:web:07f2c676ec7742f8e93e7c",
+  measurementId: "G-PC49RLLWEC"
 };
 
 // Initialize Firebase
