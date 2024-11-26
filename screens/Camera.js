@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, Button, Image, TextInput } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera'
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef} from 'react';
 import { app } from '../firebaseConfig';
-import { getDatabase, ref, push, onValue } from 'firebase/database';
+import { getDatabase, ref, push } from 'firebase/database';
 
 const database = getDatabase(app);
 
@@ -15,26 +15,11 @@ export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
   const [picture, setPicture ] = useState({
     name: "",
+    description: "",
     photograph: "",
   });
-  //const [ pics, setPics ] = useState([]);
-  //const [ keys, setKeys ] = useState([]);
 
-  /*
-  useEffect(() => {
-    const picsRef = ref(database, 'pics/');
-    onValue(picsRef, (snapshot) => {
-      const data = snapshot.val();
-      if(data) {
-        setPics(Object.values(data));
-        setKeys(Object.keys(data));
-      } else
-        setPics([]);
-    })
-  }, []);
-  */
-
-const handleSave = () => {
+const savePicture = () => {
   if(picture.name && picture.photograph) {
     push(ref(database, 'pics/'), picture);
     discardPhoto();
@@ -85,7 +70,7 @@ const handleSave = () => {
       <View style={{ flex: 1 , flexDirection: 'row' }}>
         { !photoAccept ? (
           <>
-            <CameraView style={{flex: 1, minWidth: "80%"}} ref={camera} />
+            <CameraView style={{flex: 1, maxWidth: "50%", height: "100%"}} ref={camera} />
             <Button title='Snap' style={{height: "10%"}} onPress={snap} />
           </>
         ) : (
@@ -98,21 +83,29 @@ const handleSave = () => {
               value={picture.name}
               onChangeText={text => setPicture({ ...picture, name: text })}
             />
+            <TextInput
+              style={{ marginBottom: 10 }}
+              label="Description"
+              mode="outlined"
+              placeholder='Description'
+              value={picture.description}
+              onChangeText={text => setPicture({ ...picture, description: text })}
+            />
           </>
         )}
       </View>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 , flexDirection: 'row' }}>
         {photoTaken ? (
             <>
-                <Image style={styles.image} source={photoName}/>
-                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} >
-                  <Button color="#ff4500" title='Discard Photo' onPress={discardPhoto} />
-                  {!photoAccept ? (
-                    <Button  title='Accept Photo'  onPress={acceptPhoto}/>
-                  ) : (
-                    <Button color="#008000" title='Save Photo' onPress={handleSave} />
-                  )}
-                </View>
+              <Image style={styles.image} source={photoName}/>
+              <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-between' }} >
+                <Button color="#ff4500" title='Discard Photo' onPress={discardPhoto} />
+                {!photoAccept ? (
+                  <Button  title='Accept Photo'  onPress={acceptPhoto}/>
+                ) : (
+                  <Button color="#008000" title='Save Photo' onPress={savePicture} />
+                )}
+              </View>
             </>
         ) : (
             <Text>No photo taken yet</Text>
