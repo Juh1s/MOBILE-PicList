@@ -42,8 +42,8 @@ export default function Home() {
         data={pics}
         renderItem={({item}) =>
           <View style={{ flexDirection: "row", margin: 1}}>
-            <Image style={{width: 70, maxHeight: 80}} source={item.photograph}/>
-            <View style={{margin: 2 , width: "50%" }}>
+            <Image style={{width: 70, height: 80}} source={{ uri: `data:image/jpg;base64,${item.photograph}` }}/>
+            <View style={{margin: 2 , width: "47%" }}>
               <Text style={{fontWeight: "bold", }}>{item.name} </Text>
               <Text>{item.description}</Text>
             </View>
