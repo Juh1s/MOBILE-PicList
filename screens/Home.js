@@ -1,18 +1,22 @@
 import { StyleSheet, FlatList, Text, View, Image, Button } from 'react-native';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { app } from '../firebaseConfig';
-import { getDatabase, ref, push, onValue, remove } from 'firebase/database';
+import { getDatabase, ref, onValue, remove } from 'firebase/database';
+import { signOutFirebase, currentUser } from '../App';
 
 const database = getDatabase(app);
 
-export default function Home() {
+export default function Home({ route }) {
 
+    const user = route.params;
     const pictureList = []; // setup to contain pictures and their info as a list
     const [ pics, setPics ] = useState([]);
     const [ keys, setKeys ] = useState([]);
+    //const [ userUID, setUserUID ] = useState('');
 
     useEffect(() => {
-      const picsRef = ref(database, 'pics/');
+      //setUserUID(user.uid);
+      const picsRef = ref(database, `pics/${user.uid}/`);
       onValue(picsRef, (snapshot) => {
         const data = snapshot.val();
         if(data) {
@@ -26,14 +30,14 @@ export default function Home() {
     const handleDelete = (item) => {
       const itemIndex = pics.indexOf(item);
       const itemKey = keys.at(itemIndex);
-      console.log(itemIndex);
-
-      remove( ref(database, `/pics/${itemKey}`))
+      remove( ref(database, `/pics/${user.uid}/${itemKey}`))
     }
 
     const editPics = () => {
 
     }
+
+ 
 
     return (
     <View style={styles.container}>
@@ -51,6 +55,11 @@ export default function Home() {
             <Button color="#ff4500" title='Delete' onPress={() => handleDelete(item)}/>
           </View>
         }
+      />
+      <Button title='User data' onPress={() => console.log(user.uid)}/>
+      <Button title='Sign Out' onPress={() => 
+        signOutFirebase()
+      }
       />
     </View>
     );
