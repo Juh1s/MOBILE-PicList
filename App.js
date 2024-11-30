@@ -11,6 +11,8 @@ import Camera from './screens/Camera';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import EditProfile from './screens/EditProfile';
 import EditPicture from './screens/EditPicture';
+import UsersLists from './screens/UsersLists';
+import Gallery from './screens/Gallery';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,6 +25,15 @@ function HomeScreen() {
       <Stack.Screen name='Home_1' component={Home} />
       <Stack.Screen name='Edit Profile' component={EditProfile} />
       <Stack.Screen name='Edit Picture' component={EditPicture} />
+    </Stack.Navigator>
+  );
+}
+
+function ListScreen() {
+  return(
+    <Stack.Navigator initialRouteName='ListScreen' screenOptions={{headerShown: false}}>
+      <Stack.Screen name='Users Lists' component={UsersLists} />
+      <Stack.Screen name='Gallery' component={Gallery} />
     </Stack.Navigator>
   );
 }
@@ -95,6 +106,8 @@ export default function App() {
                 iconName = 'home';
               } else if (route.name === 'Camera') {
                 iconName = 'camera';
+              } else if (route.name === 'Users Lists') {
+                iconName = 'albums';
               }
 
               return <Ionicons name={iconName} size={size} color={color} />; 
@@ -102,8 +115,8 @@ export default function App() {
           })}
         >
           <Tab.Screen name='Camera' component={Camera} />
-          <Tab.Screen name='Home Screen' component={HomeScreen}>
-          </Tab.Screen>
+          <Tab.Screen name='Home Screen' component={HomeScreen} />
+          <Tab.Screen name='Users Lists' component={ListScreen} />
         </Tab.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>

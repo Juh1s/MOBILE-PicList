@@ -37,7 +37,6 @@ export default function EditProfile({ navigation }) {
         console.log(errorCode);
         console.log(errorMessage);
       });
-    
   }
 
     return (

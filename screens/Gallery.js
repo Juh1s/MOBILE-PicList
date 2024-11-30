@@ -2,19 +2,17 @@ import { StyleSheet, FlatList, Text, View, Image, Button } from 'react-native';
 import { useState, useEffect } from 'react';
 import { app } from '../firebaseConfig';
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
 
 const database = getDatabase(app);
-const auth = getAuth(app);
 
-export default function Home({ navigation }) {
+export default function Gallery({ navigation, route }) {
 
-    const user = auth.currentUser;
+    const { list, listKey } = route.params
     const [ pics, setPics ] = useState([]);
     const [ keys, setKeys ] = useState([]);
 
     useEffect(() => {
-      const picsRef = ref(database, `pics/${user.uid}/`);
+      const picsRef = ref(database, listKey);
       onValue(picsRef, (snapshot) => {
         const data = snapshot.val();
         if(data) {
@@ -28,13 +26,13 @@ export default function Home({ navigation }) {
     const findItemKey = (item) => {
       const itemIndex = pics.indexOf(item);
       const itemKey = keys.at(itemIndex);
-      return(`/pics/${user.uid}/${itemKey}`);
+      return(`${listKey}/${itemKey}`);
     }
 
     return (
     <View style={styles.container}>
-      <Button title='Edit Profile' onPress={() => navigation.navigate('Edit Profile')} />
-      <Text style={{fontSize: 20, marginBottom: 5 }}>Your Picture List</Text>
+      <Button style={{ margin: 1 }} title='Back' onPress={() => navigation.goBack()} />
+      <Text style={{fontSize: 20, marginBottom: 5 }}>User Picture List</Text>
       <FlatList 
         data={pics}
         renderItem={({item}) => 
@@ -44,10 +42,6 @@ export default function Home({ navigation }) {
               <Text style={{fontWeight: "bold", }}>{item.name} </Text>
               <Text>{item.description}</Text>
             </View>
-            <Button title='Edit' onPress={() => {
-              const itemKey = findItemKey(item);
-              navigation.navigate('Edit Picture', {item, itemKey})}
-            }/>
           </View>
         }
       />
