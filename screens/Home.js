@@ -1,21 +1,23 @@
 import { StyleSheet, FlatList, Text, View, Image, Button } from 'react-native';
 import { useState, useEffect } from 'react';
 import { app } from '../firebaseConfig';
+import { createNativeStackNavigator} from '@react-navigation/native-stack';
 import { getDatabase, ref, onValue, remove } from 'firebase/database';
-import { signOutFirebase, currentUser } from '../App';
+import { currentUser } from '../App';
+import { getAuth } from 'firebase/auth';
 
 const database = getDatabase(app);
+const auth = getAuth(app);
+const Stack = createNativeStackNavigator();
 
-export default function Home({ route }) {
+export default function Home({ navigation }) {
 
-    const user = route.params;
+    const user = auth.currentUser;
     const pictureList = []; // setup to contain pictures and their info as a list
     const [ pics, setPics ] = useState([]);
     const [ keys, setKeys ] = useState([]);
-    //const [ userUID, setUserUID ] = useState('');
 
     useEffect(() => {
-      //setUserUID(user.uid);
       const picsRef = ref(database, `pics/${user.uid}/`);
       onValue(picsRef, (snapshot) => {
         const data = snapshot.val();
@@ -41,6 +43,7 @@ export default function Home({ route }) {
 
     return (
     <View style={styles.container}>
+      <Button title='Edit Profile' onPress={() => navigation.navigate('Edit Profile')} />
       <Text style={{fontSize: 20, marginBottom: 5 }}>Picture List</Text>
       <FlatList 
         data={pics}
@@ -55,11 +58,6 @@ export default function Home({ route }) {
             <Button color="#ff4500" title='Delete' onPress={() => handleDelete(item)}/>
           </View>
         }
-      />
-      <Button title='User data' onPress={() => console.log(user.uid)}/>
-      <Button title='Sign Out' onPress={() => 
-        signOutFirebase()
-      }
       />
     </View>
     );

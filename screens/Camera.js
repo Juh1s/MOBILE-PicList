@@ -7,7 +7,6 @@ import { getDatabase, ref, push } from 'firebase/database';
 const database = getDatabase(app);
 
 export default function Camera({ route }) {
-  
   const user = route.params;
   // cameraMode switches between values 0, 1 & 2.
   // They represent the different modes of the screen layout.
@@ -53,7 +52,7 @@ export default function Camera({ route }) {
   // Save the current picture to the database, empty the held photo and revert layout.
   const savePicture = () => {
     if(picture.name && picture.photograph) {
-      push(ref(database, `pics/${user.uid}/`), picture);
+      push(ref(database, `pics/${user.uid}`), picture);
       discardPhoto();
     } else {
       Alert.alert("Warning", "Type value first");

@@ -1,37 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button,  TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { app } from './firebaseConfig';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import Home from './screens/Home';
 import Camera from './screens/Camera';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import EditProfile from './screens/EditProfile';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 const auth = getAuth(app);
 
-
-
-export const signOutFirebase = () => {
-  signOut(auth)
-    .then(() => {
-      console.log("Signed out.")
-
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode);
-      console.log(errorMessage);
-    });
-}
-
-
-const deleteUserInFirebase = () => {
-  console.log("DELETE USER");
-  
+function HomeScreen() {
+  return(
+    <Stack.Navigator initialRouteName='HomeScreen' screenOptions={{headerShown: false}}>
+      <Stack.Screen name='Home_1' component={Home} />
+      <Stack.Screen name='Edit Profile' component={EditProfile} />
+    </Stack.Navigator>
+  );
 }
 
 export default function App() {
@@ -41,12 +32,6 @@ export default function App() {
   });
   const [loggedIn, setLoggedIn] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
-
-
-  
-
-  const placeholder = () => {
-  }
 
   const createAccount = () => {
     createUserWithEmailAndPassword(auth,userInput.email, userInput.password)
@@ -81,9 +66,6 @@ export default function App() {
     })
   }
 
-
-
-
   onAuthStateChanged(auth, (user) => {
     if(user) {
       setLoggedIn(true);
@@ -93,7 +75,6 @@ export default function App() {
     }
   })
   
-  //signOutFirebase();
   if(!loggedIn) {
     return(
       <View style={styles.container} >
@@ -115,7 +96,6 @@ export default function App() {
         />
         <Button title='Sign in' onPress={signIn} />
         <Button title='Create Account' onPress={createAccount} />
-        <Button title='Sign out' onPress={signOutFirebase} />
       </View>
     )
   } else {
@@ -126,7 +106,7 @@ export default function App() {
             tabBarIcon: ({ focused, color, size }) => { 
               let iconName;
 
-              if (route.name === 'Home') {
+              if (route.name === 'Home Screen') {
                 iconName = 'home';
               } else if (route.name === 'Camera') {
                 iconName = 'camera';
@@ -137,7 +117,8 @@ export default function App() {
           })}
         >
           <Tab.Screen name='Camera' component={Camera} initialParams={ currentUser }/>
-          <Tab.Screen name='Home' component={ Home } initialParams={ currentUser }  />
+          <Tab.Screen name='Home Screen' component={HomeScreen}>
+          </Tab.Screen>
         </Tab.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>
