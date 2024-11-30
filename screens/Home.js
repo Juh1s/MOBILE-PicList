@@ -1,14 +1,11 @@
 import { StyleSheet, FlatList, Text, View, Image, Button } from 'react-native';
 import { useState, useEffect } from 'react';
 import { app } from '../firebaseConfig';
-import { createNativeStackNavigator} from '@react-navigation/native-stack';
-import { getDatabase, ref, onValue, remove } from 'firebase/database';
-import { currentUser } from '../App';
+import { getDatabase, ref, onValue } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 
 const database = getDatabase(app);
 const auth = getAuth(app);
-const Stack = createNativeStackNavigator();
 
 export default function Home({ navigation }) {
 
@@ -29,17 +26,11 @@ export default function Home({ navigation }) {
       })
     }, []);
 
-    const handleDelete = (item) => {
+    const findItemKey = (item) => {
       const itemIndex = pics.indexOf(item);
       const itemKey = keys.at(itemIndex);
-      remove( ref(database, `/pics/${user.uid}/${itemKey}`))
+      return(`/pics/${user.uid}/${itemKey}`);
     }
-
-    const editPics = () => {
-
-    }
-
- 
 
     return (
     <View style={styles.container}>
@@ -54,8 +45,10 @@ export default function Home({ navigation }) {
               <Text style={{fontWeight: "bold", }}>{item.name} </Text>
               <Text>{item.description}</Text>
             </View>
-            <Button title='Edit' onPress={editPics}/>
-            <Button color="#ff4500" title='Delete' onPress={() => handleDelete(item)}/>
+            <Button title='Edit' onPress={() => {
+              const itemKey = findItemKey(item);
+              navigation.navigate('Edit Picture', {item, itemKey})}
+              }/>
           </View>
         }
       />

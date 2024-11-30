@@ -10,6 +10,7 @@ import Home from './screens/Home';
 import Camera from './screens/Camera';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import EditProfile from './screens/EditProfile';
+import EditPicture from './screens/EditPicture';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ function HomeScreen() {
     <Stack.Navigator initialRouteName='HomeScreen' screenOptions={{headerShown: false}}>
       <Stack.Screen name='Home_1' component={Home} />
       <Stack.Screen name='Edit Profile' component={EditProfile} />
+      <Stack.Screen name='Edit Picture' component={EditPicture} />
     </Stack.Navigator>
   );
 }

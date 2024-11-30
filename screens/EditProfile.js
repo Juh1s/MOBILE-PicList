@@ -31,14 +31,12 @@ export default function EditProfile({ navigation }) {
   const deleteUserInFirebase = () => {
     deleteUser(user)
       .then(() => {
-        console.log("User DELETED!");
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
       });
-    console.log("DELETE USER");
     
   }
 
@@ -69,7 +67,7 @@ export default function EditProfile({ navigation }) {
       </View>
       <Button style={{ margin: 1 }} title='User data' onPress={() => console.log(user.uid)}/>
       <Button style={{ margin: 1 }} title='Sign Out' onPress={() => signOutFirebase()} />
-      <Button style={{ margin: 10 }} title='Delete Account' onPress={() => deleteUserInFirebase()} />
+      <Button style={{ margin: 1 }} title='Delete Account' onPress={() => deleteUserInFirebase()} />
       <Button style={{ margin: 1 }} title='Back' onPress={() => navigation.goBack()} />
     </View>
     );
