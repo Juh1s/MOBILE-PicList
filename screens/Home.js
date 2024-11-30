@@ -10,7 +10,6 @@ const auth = getAuth(app);
 export default function Home({ navigation }) {
 
     const user = auth.currentUser;
-    const pictureList = []; // setup to contain pictures and their info as a list
     const [ pics, setPics ] = useState([]);
     const [ keys, setKeys ] = useState([]);
 

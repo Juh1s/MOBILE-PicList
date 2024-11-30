@@ -3,11 +3,13 @@ import { CameraView, useCameraPermissions } from 'expo-camera'
 import { useState, useRef} from 'react';
 import { app } from '../firebaseConfig';
 import { getDatabase, ref, push } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 
 const database = getDatabase(app);
+const auth = getAuth(app);
 
-export default function Camera({ route }) {
-  const user = route.params;
+export default function Camera() {
+  const user = auth.currentUser;
   // cameraMode switches between values 0, 1 & 2.
   // They represent the different modes of the screen layout.
   const [cameraMode, setCameraMode] = useState(0);

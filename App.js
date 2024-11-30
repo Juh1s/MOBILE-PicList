@@ -2,8 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, View, Button, TextInput } from 'react-native';
 import { app } from './firebaseConfig';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import Home from './screens/Home';
@@ -32,18 +32,16 @@ export default function App() {
       email: '',
       password: '',
   });
-  const [loggedIn, setLoggedIn] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+  }, []);
 
   const createAccount = () => {
     createUserWithEmailAndPassword(auth,userInput.email, userInput.password)
-      .then((userCredential) => {
-
-        const user = userCredential.user;
-        setCurrentUser(user);
-        console.log(user);
-        console.log("Created account!")
-      })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -54,12 +52,6 @@ export default function App() {
 
   const signIn = () => {
     signInWithEmailAndPassword(auth, userInput.email, userInput.password)
-    .then((userCredential) => {
-
-      const user = userCredential.user;
-      setCurrentUser(user);
-      console.log(user);
-    })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -68,16 +60,7 @@ export default function App() {
     })
   }
 
-  onAuthStateChanged(auth, (user) => {
-    if(user) {
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-      setCurrentUser(null);
-    }
-  })
-  
-  if(!loggedIn) {
+  if(!currentUser) {
     return(
       <View style={styles.container} >
         <TextInput
@@ -118,7 +101,7 @@ export default function App() {
             },
           })}
         >
-          <Tab.Screen name='Camera' component={Camera} initialParams={ currentUser }/>
+          <Tab.Screen name='Camera' component={Camera} />
           <Tab.Screen name='Home Screen' component={HomeScreen}>
           </Tab.Screen>
         </Tab.Navigator>
