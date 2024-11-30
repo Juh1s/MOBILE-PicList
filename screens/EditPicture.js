@@ -28,7 +28,7 @@ export default function EditPicture({ navigation, route }) {
     <View style={styles.container} >
       <Image style={{width: "50%", height: "40%"}} source={{uri: `data:image/jpg;base64,${picture.photograph}`}} />
       <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-        <Text>Name: </Text>
+        <Text style={{fontWeight: "bold", }}>Name: </Text>
         <TextInput
             style={{ marginBottom: 10 }}
             label="Name"
@@ -39,7 +39,7 @@ export default function EditPicture({ navigation, route }) {
         />
       </View>
       <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-        <Text>Description: </Text>
+        <Text style={{fontWeight: "bold", }}>Description: </Text>
         <TextInput
             style={{ marginBottom: 10 }}
             label="Description"

@@ -25,24 +25,23 @@ export default function UsersLists({ navigation }) {
   const findListName = (list) => {
     const listIndex = lists.indexOf(list);
     const listKey = keys.at(listIndex);
-    console.log('listKey', listKey);
     return(`${listKey}`);
   }
-  
+
   return(
     <View style={styles.container} >
       <Text style={{fontSize: 20, marginBottom: 5 }}>All Users Lists</Text>
       <FlatList 
         data={lists}
         renderItem={({item}) => 
-          <View style={{ flexDirection: "row", marginTop: 10 }}>
-            <Text style={{ fontWeight: "bold" }}>{findListName(item)} </Text>
-            <Button title='View User Gallery' onPress={() => {
-              const listName = findListName(item);
-              const listKey = `/pics/${listName}`;
-              navigation.navigate('Gallery', {item,  listKey})}
-            }/>
-          </View>
+            <View style={{ flexDirection: "row", marginTop: 10 }}>
+              <Text style={{ fontWeight: "bold" }}>{findListName(item)} </Text>
+              <Button title='View User Gallery' onPress={() => {
+                const listName = findListName(item);
+                const listKey = `/pics/${listName}`;
+                navigation.navigate('Gallery', {item,  listKey})}
+              }/>
+            </View>
         }
       />
     </View>

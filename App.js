@@ -13,6 +13,7 @@ import EditProfile from './screens/EditProfile';
 import EditPicture from './screens/EditPicture';
 import UsersLists from './screens/UsersLists';
 import Gallery from './screens/Gallery';
+import ViewPicture from './screens/ViewPicture';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ function ListScreen() {
     <Stack.Navigator initialRouteName='ListScreen' screenOptions={{headerShown: false}}>
       <Stack.Screen name='Users Lists' component={UsersLists} />
       <Stack.Screen name='Gallery' component={Gallery} />
+      <Stack.Screen name='View Picture' component={ViewPicture} />
     </Stack.Navigator>
   );
 }

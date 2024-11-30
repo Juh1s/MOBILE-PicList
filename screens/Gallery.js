@@ -42,6 +42,10 @@ export default function Gallery({ navigation, route }) {
               <Text style={{fontWeight: "bold", }}>{item.name} </Text>
               <Text>{item.description}</Text>
             </View>
+            <Button title='Edit' onPress={() => {
+              const itemKey = findItemKey(item);
+              navigation.navigate('View Picture', {item})}
+            }/>
           </View>
         }
       />
