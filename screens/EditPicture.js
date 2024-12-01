@@ -35,7 +35,7 @@ export default function EditPicture({ navigation, route }) {
             mode="outlined"
             placeholder='Name'
             value={picture.name}
-            onChangeText={text => setUserInput({ ...picture, name: text })}
+            onChangeText={text => setPicture({ ...picture, name: text })}
         />
       </View>
       <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
@@ -49,9 +49,11 @@ export default function EditPicture({ navigation, route }) {
             onChangeText={text => setPicture({ ...picture, description: text })}
         />
       </View>
-      <Button color="#008000" title='Save Changes' onPress={() => handleUpdate()}/>
-      <Button color="#ff4500" title='Delete' onPress={() => handleDelete()}/>
-      <Button style={{ margin: 1 }} title='Back' onPress={() => navigation.goBack()} />
+      <View style={{ flexDirection: 'row', margin: 20, justifyContent: 'space-between' }}>
+        <Button color="#008000" title='Save Changes' onPress={() => handleUpdate()}/>
+        <Button color="#ff4500" title='Delete' onPress={() => handleDelete()}/>
+        <Button style={{ margin: 1 }} title='Go Back' onPress={() => navigation.goBack()} />
+      </View>
     </View>
   );
 }

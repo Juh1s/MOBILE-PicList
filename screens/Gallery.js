@@ -7,9 +7,8 @@ const database = getDatabase(app);
 
 export default function Gallery({ navigation, route }) {
 
-    const { list, listKey } = route.params
+    const { listKey } = route.params
     const [ pics, setPics ] = useState([]);
-    const [ keys, setKeys ] = useState([]);
 
     useEffect(() => {
       const picsRef = ref(database, listKey);
@@ -17,21 +16,13 @@ export default function Gallery({ navigation, route }) {
         const data = snapshot.val();
         if(data) {
           setPics(Object.values(data));
-          setKeys(Object.keys(data));
         } else
           setPics([]);
       })
     }, []);
 
-    const findItemKey = (item) => {
-      const itemIndex = pics.indexOf(item);
-      const itemKey = keys.at(itemIndex);
-      return(`${listKey}/${itemKey}`);
-    }
-
     return (
     <View style={styles.container}>
-      <Button style={{ margin: 1 }} title='Back' onPress={() => navigation.goBack()} />
       <Text style={{fontSize: 20, marginBottom: 5 }}>User Picture List</Text>
       <FlatList 
         data={pics}
@@ -42,13 +33,15 @@ export default function Gallery({ navigation, route }) {
               <Text style={{fontWeight: "bold", }}>{item.name} </Text>
               <Text>{item.description}</Text>
             </View>
-            <Button title='Edit' onPress={() => {
-              const itemKey = findItemKey(item);
+            <Button title={`View\nPic`} onPress={() => {
               navigation.navigate('View Picture', {item})}
             }/>
           </View>
         }
       />
+      <View style={{ margin: 30 }}>
+        <Button title='Back' onPress={() => navigation.goBack()} />
+      </View>
     </View>
     );
 }

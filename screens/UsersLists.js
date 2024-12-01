@@ -39,7 +39,7 @@ export default function UsersLists({ navigation }) {
               <Button title='View User Gallery' onPress={() => {
                 const listName = findListName(item);
                 const listKey = `/pics/${listName}`;
-                navigation.navigate('Gallery', {item,  listKey})}
+                navigation.navigate('Gallery', { listKey})}
               }/>
             </View>
         }

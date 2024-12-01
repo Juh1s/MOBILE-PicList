@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { app } from '../firebaseConfig';
-import { getAuth, signOut, deleteUser, updateProfile, updateEmail } from 'firebase/auth';
+import { getAuth, signOut, deleteUser, updateProfile } from 'firebase/auth';
 
 const auth = getAuth(app);
 
@@ -52,8 +52,8 @@ export default function EditProfile({ navigation }) {
 
     return (
     <View style={styles.container}>
-      <Text style={{fontSize: 16 }}>EDIT PROFILE</Text>
-      <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+      <Text style={{ fontSize: 16 }}>EDIT PROFILE</Text>
+      <View style={{ flexDirection: 'column' }}>
         <Text style={{fontWeight: "bold", }}>Email: </Text>
         <Text>{user.email}</Text>
       </View>
@@ -69,9 +69,11 @@ export default function EditProfile({ navigation }) {
         />
         <Button style={{ marginBottom: 5 }} title='Change Name' onPress={() => updateUserName(userInput.name)}/>
       </View>
-      <Button style={{ margin: 1 }} title='Sign Out' onPress={() => signOutFirebase()} />
-      <Button style={{ margin: 1 }} title='Delete Account' color="#ff4500" onPress={() => deleteUserInFirebase()} />
-      <Button style={{ margin: 1 }} title='Back' onPress={() => navigation.goBack()} />
+      <View style={{ flexDirection: 'row', margin: 20, justifyContent: 'space-between' }}>
+        <Button style={{ margin: 1 }} title='Sign Out' color="#ffbf00" onPress={() => signOutFirebase()} />
+        <Button style={{ margin: 1 }} title='Delete Account' color="#ff4500" onPress={() => deleteUserInFirebase()} />
+        <Button style={{ margin: 1 }} title='Go Back' onPress={() => navigation.goBack()} />
+      </View>
     </View>
     );
 }

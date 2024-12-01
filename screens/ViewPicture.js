@@ -1,9 +1,4 @@
-import { useState } from 'react';
-import { app } from '../firebaseConfig';
-import { StyleSheet, Text, View, Button, TextInput, Image } from 'react-native';
-import { getDatabase, ref, remove, update } from 'firebase/database';
-
-const database = getDatabase(app);
+import { StyleSheet, Text, View, Button, Image } from 'react-native';
 
 export default function ViewPicture({ navigation, route }) {
     const { item } = route.params;

@@ -23,7 +23,7 @@ const auth = getAuth(app);
 function HomeScreen() {
   return(
     <Stack.Navigator initialRouteName='HomeScreen' screenOptions={{headerShown: false}}>
-      <Stack.Screen name='Home_1' component={Home} />
+      <Stack.Screen name='Home Page' component={Home} />
       <Stack.Screen name='Edit Profile' component={EditProfile} />
       <Stack.Screen name='Edit Picture' component={EditPicture} />
     </Stack.Navigator>
@@ -60,6 +60,7 @@ export default function App() {
         const errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
+        alert("To create account you must have a valid email and password of at least 6 characters.");
       })
   }
 
@@ -70,6 +71,7 @@ export default function App() {
       const errorMessage = error.message;
       console.log(errorCode);
       console.log(errorMessage);
+      alert("Your sign in credentials are invalid.");
     })
   }
 
@@ -92,7 +94,7 @@ export default function App() {
             value={userInput.password}
             onChangeText={text => setUserInput({ ...userInput, password: text })}
         />
-        <Button title='Sign in' onPress={signIn} />
+        <Button title='Sign in' color="#338faf" onPress={signIn} />
         <Button title='Create Account' onPress={createAccount} />
       </View>
     )
@@ -101,14 +103,14 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({ route }) => ({  
-            tabBarIcon: ({ focused, color, size }) => { 
+            tabBarIcon: ({ color, size }) => { 
               let iconName;
 
-              if (route.name === 'Home Screen') {
+              if (route.name === 'Home') {
                 iconName = 'home';
               } else if (route.name === 'Camera') {
                 iconName = 'camera';
-              } else if (route.name === 'Users Lists') {
+              } else if (route.name === 'All Lists') {
                 iconName = 'albums';
               }
 
@@ -117,8 +119,8 @@ export default function App() {
           })}
         >
           <Tab.Screen name='Camera' component={Camera} />
-          <Tab.Screen name='Home Screen' component={HomeScreen} />
-          <Tab.Screen name='Users Lists' component={ListScreen} />
+          <Tab.Screen name='Home' component={HomeScreen} />
+          <Tab.Screen name='All Lists' component={ListScreen} />
         </Tab.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>

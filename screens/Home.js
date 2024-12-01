@@ -44,7 +44,7 @@ export default function Home({ navigation }) {
               <Text style={{fontWeight: "bold", }}>{item.name} </Text>
               <Text>{item.description}</Text>
             </View>
-            <Button title='Edit' onPress={() => {
+            <Button title={`Edit \n Info`} onPress={() => {
               const itemKey = findItemKey(item);
               navigation.navigate('Edit Picture', {item, itemKey})}
             }/>

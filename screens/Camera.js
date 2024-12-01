@@ -57,7 +57,7 @@ export default function Camera() {
       push(ref(database, `pics/${user.uid}`), picture);
       discardPhoto();
     } else {
-      Alert.alert("Warning", "Type value first");
+      alert("Photo requires a name.");
     }
   }
 
@@ -77,7 +77,7 @@ export default function Camera() {
         { (cameraMode < 2) ? ( // cameraMode < 2
           <>
               <CameraView style={{flex: 1, maxWidth: "50%", height: "100%"}} ref={camera} />
-              <Button title='Snap' style={{height: "10%"}} onPress={snap} />
+              <Button title={`Snap\na\nPic`} style={{height: "10%"}} onPress={snap} />
           </>
         ) : ( // cameraMode == 2
           <>
